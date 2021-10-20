@@ -11,7 +11,7 @@ public class Main {
         graph.addNode("C");
 
         graph.addEdge("A","B",2);
-        graph.addEdge("B","C",2);
+        graph.addEdge("A","C",3);
 
         graph.print();
     }
