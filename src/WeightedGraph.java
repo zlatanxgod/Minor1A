@@ -84,15 +84,19 @@ public class WeightedGraph {
     }
 
 
-    public int getShortestDistance(String from,String to){
+    public Path getShortestPath(String from,String to){
 
         Node fromNode = nodes.get(from);
+        Node toNode = nodes.get(to);
 
         HashMap<Node,Integer> distances = new HashMap<>();
         for(Node n : nodes.values()){
             distances.put(n,Integer.MAX_VALUE);
         }
         distances.replace(fromNode,0);
+
+        HashMap<Node,Node> previousNode = new HashMap<>();
+
 
         Set<Node> visited = new HashSet<>();
 
@@ -113,13 +117,29 @@ public class WeightedGraph {
                var newDistance = distances.get(current)+ edge.weight;
                if(newDistance < distances.get(edge.to)){
                    distances.replace(edge.to, newDistance);
+                   //
+                   previousNode.put(edge.to, current);
                    pqueue.add(new NodeEntry(edge.to,newDistance));
                }
            }
 
         }
 
-        return distances.get(nodes.get(to));
+        Stack<Node> stack = new Stack<>();
+        stack.push(nodes.get(to));
+        var previous = previousNode.get(toNode);
+        while(previous!= null){
+            stack.push(previous);
+            previous = previousNode.get(previous);
+        }
+
+        var path = new Path();
+        while(!stack.isEmpty()){
+            path.add(stack.pop().label);
+        }
+
+        return path;
+       // return distances.get(nodes.get(to));
     }
 
 
